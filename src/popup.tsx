@@ -2,8 +2,12 @@ import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import shuffle from "./helper/shuffle";
 
+const meetUrlPattern =
+  /^(https|http):\/\/([a-z]{1,}\.|)(meet\.google\.com)(\/(.*)|\?(.*)|$)$/g;
+
 const Popup = () => {
   // state
+  const [currentURL, setCurrentURL] = useState<string>("");
   const [user, setUser] = useState<string>("");
   const [status, setStatus] = useState<string>();
   const [currentTime, setCurrentTime] = useState<Date>();
@@ -25,6 +29,10 @@ const Popup = () => {
         setUser(items.user);
       }
     );
+
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      setCurrentURL(tabs[0].url || "");
+    });
   }, []);
 
   const saveOptions = () => {
@@ -76,6 +84,8 @@ const Popup = () => {
     });
   };
 
+  const isGoogleMeet = meetUrlPattern.test(currentURL);
+
   return (
     <>
       <div>
@@ -98,24 +108,34 @@ const Popup = () => {
             </div>
           </section>
           <section>
-            <div>
-              <button onClick={changeBackground}>一覧取得</button>
-            </div>
-
-            {!!currentTime && (
-              <div>Current Time: {currentTime.toLocaleTimeString()}</div>
-            )}
-            {!!members.length && (
-              <div>
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  <p>参加メンバー</p>
-                  <ul style={{ listStyle: "none" }}>
-                    {members.map((x, i) => (
-                      <li key={i}>{x}</li>
-                    ))}
-                  </ul>
+            {isGoogleMeet ? (
+              <>
+                <div>
+                  <button onClick={changeBackground}>一覧取得</button>
                 </div>
-              </div>
+
+                {!!currentTime && (
+                  <div>Current Time: {currentTime.toLocaleTimeString()}</div>
+                )}
+                {!!members.length && (
+                  <div>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                      <p>参加メンバー</p>
+                      <ul style={{ listStyle: "none" }}>
+                        {members.map((x, i) => (
+                          <li key={i}>{x}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : (
+              <p>
+                このぺーじではお使いいただけません。
+                <a href={"https://meet.google.com/"}>Google Meet</a>{" "}
+                に移動してください。
+              </p>
             )}
           </section>
         </div>
