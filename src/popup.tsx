@@ -1,31 +1,46 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
+import { NOT_FOUND } from "./constants/common";
+import shuffle from "./helper/shuffle";
+
+type ErrorMsgProps = {
+  errorText: string;
+};
+
+const ErrorMsg: React.FC<ErrorMsgProps> = ({ errorText }) => {
+  return <p style={{ color: "red" }}>{errorText}</p>;
+};
 
 const Popup = () => {
-  const [count, setCount] = useState(0);
-  const [currentURL, setCurrentURL] = useState<string>();
+  // state
+  const [currentTime, setCurrentTime] = useState<Date>();
+  const [members, setMembers] = useState<string[]>([]);
+  const [errorMsg, setErrorMsg] = useState<string>("");
 
-  useEffect(() => {
-    chrome.browserAction.setBadgeText({ text: count.toString() });
-  }, [count]);
-
-  useEffect(() => {
+  const getMemberList = () => {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      setCurrentURL(tabs[0].url);
-    });
-  }, []);
-
-  const changeBackground = () => {
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      // 現在表示しているタブを取得
       const tab = tabs[0];
       if (tab.id) {
         chrome.tabs.sendMessage(
           tab.id,
-          {
-            color: "#555555",
-          },
+          undefined, // message は不要なため undefined とする
           (msg) => {
-            console.log("result message:", msg);
+            if (typeof msg === "string") {
+              // validation
+              if (msg === NOT_FOUND) {
+                setErrorMsg(
+                  "Google Meet 画面の「全員を表示」ボタンをクリックしてください"
+                );
+                return;
+              }
+              setErrorMsg("");
+
+              const shuffledMemcbers = shuffle(msg.split(","));
+
+              setCurrentTime(new Date());
+              setMembers(shuffledMemcbers);
+            }
           }
         );
       }
@@ -34,17 +49,37 @@ const Popup = () => {
 
   return (
     <>
-      <ul style={{ minWidth: "700px" }}>
-        <li>Current URL: {currentURL}</li>
-        <li>Current Time: {new Date().toLocaleTimeString()}</li>
-      </ul>
-      <button
-        onClick={() => setCount(count + 1)}
-        style={{ marginRight: "5px" }}
-      >
-        count up
-      </button>
-      <button onClick={changeBackground}>change background</button>
+      <div>
+        <div style={{ minWidth: "300px", padding: "1rem" }}>
+          <section style={{ marginBottom: "1rem" }}>
+            <div>
+              現在 Meet に参加しているメンバーを並び替えて一覧表示します
+            </div>
+          </section>
+          <section>
+            <div>
+              <button onClick={getMemberList}>一覧取得</button>
+            </div>
+
+            {!!errorMsg && <ErrorMsg errorText={errorMsg} />}
+            {!!currentTime && (
+              <div>Current Time: {currentTime.toLocaleTimeString()}</div>
+            )}
+            {!!members.length && (
+              <div>
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <p>参加メンバー</p>
+                  <ul style={{ listStyle: "none" }}>
+                    {members.map((x, i) => (
+                      <li key={i}>{`${i + 1}. ${x}`}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+          </section>
+        </div>
+      </div>
     </>
   );
 };

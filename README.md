@@ -1,6 +1,22 @@
-# Chrome Extension TypeScript Starter
+# Member Sort Extension for Google Meet
 
-![build](https://github.com/chibat/chrome-extension-typescript-starter/workflows/build/badge.svg)
+![image](https://user-images.githubusercontent.com/24993603/124685156-aae99080-df0b-11eb-94fd-aa7fcdc861e8.png)
+
+## 使い方
+
+- `dist` ディレクトリが生成されていること
+
+  - `dist` ディレクトリがない場合は下に記載のある Setup・Build を実行する
+
+- `chrome://extensions/` にアクセスし、「パッケージ化されていない拡張機能を取り込む」をクリック
+
+- `chrome-extension-typescript-starter/dist` ディレクトリを取り込む
+
+ここまで行うと chrome の拡張機能に表示されます
+
+---
+
+<!-- ![build](https://github.com/chibat/chrome-extension-typescript-starter/workflows/build/badge.svg) -->
 
 Chrome Extension, TypeScript and Visual Studio Code
 
@@ -11,19 +27,6 @@ Chrome Extension, TypeScript and Visual Studio Code
 ## Option
 
 * [Visual Studio Code](https://code.visualstudio.com/)
-
-## Includes the following
-
-* TypeScript
-* Webpack
-* React
-* Jest
-* Example Code
-    * Chrome Storage
-    * Options Version 2
-    * content script
-    * count up badge number
-    * background
 
 ## Project Structure
 
@@ -68,3 +71,7 @@ Load `dist` directory
 
 ## Test
 `npx jest` or `npm run test`
+
+## etc.
+
+referenced from: <https://github.com/chibat/chrome-extension-typescript-starter>
