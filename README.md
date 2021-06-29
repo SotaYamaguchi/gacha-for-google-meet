@@ -1,6 +1,6 @@
-# Chrome Extension TypeScript Starter
+# Member Sort Extension for Google Meet
 
-![build](https://github.com/chibat/chrome-extension-typescript-starter/workflows/build/badge.svg)
+<!-- ![build](https://github.com/chibat/chrome-extension-typescript-starter/workflows/build/badge.svg) -->
 
 Chrome Extension, TypeScript and Visual Studio Code
 
@@ -11,19 +11,6 @@ Chrome Extension, TypeScript and Visual Studio Code
 ## Option
 
 * [Visual Studio Code](https://code.visualstudio.com/)
-
-## Includes the following
-
-* TypeScript
-* Webpack
-* React
-* Jest
-* Example Code
-    * Chrome Storage
-    * Options Version 2
-    * content script
-    * count up badge number
-    * background
 
 ## Project Structure
 
@@ -68,3 +55,7 @@ Load `dist` directory
 
 ## Test
 `npx jest` or `npm run test`
+
+## etc.
+
+referenced from: <https://github.com/chibat/chrome-extension-typescript-starter>

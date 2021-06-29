@@ -40,7 +40,7 @@ const Options = () => {
   };
 
   return (
-    <>
+    <div>
       <div>
         Favorite color:&nbsp;
         <select
@@ -65,7 +65,7 @@ const Options = () => {
       </div>
       <div>{status}</div>
       <button onClick={saveOptions}>Save</button>
-    </>
+    </div>
   );
 };
 

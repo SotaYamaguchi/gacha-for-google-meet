@@ -1,11 +1,11 @@
 {
-  "name": "chrome-extension-typescript-starter",
+  "name": "member-sort-extension-for-google-meet",
   "version": "1.0.0",
-  "description": "chrome-extension-typescript-starter",
+  "description": "member-sort-extension-for-google-meet",
   "main": "index.js",
   "scripts": {
     "watch": "webpack --config webpack/webpack.dev.js --watch",
-    "build": "webpack --config webpack/webpack.prod.js",
+    "build": "prettier --write \"src/**/*.{ts,tsx}\" & webpack --config webpack/webpack.prod.js",
     "clean": "rimraf dist",
     "test": "npx jest",
     "style": "prettier --write \"src/**/*.{ts,tsx}\""
@@ -21,14 +21,13 @@
     "react-dom": "^17.0.1"
   },
   "devDependencies": {
-    "@types/chrome": "0.0.143",
+    "@types/chrome": "0.0.145",
     "@types/jest": "^25.1.4",
     "@types/jquery": "^3.3.33",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "copy-webpack-plugin": "^6.1.0",
     "glob": "^7.1.6",
-    "jest": "^26.6.3",
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2 ",
     "ts-jest": "^25.2.1 ",

@@ -1,9 +1,12 @@
-chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
-  if (msg.color) {
-    console.log("Receive color = " + msg.color);
-    document.body.style.backgroundColor = msg.color;
-    sendResponse("Change color to " + msg.color);
-  } else {
-    sendResponse("Color message is none.");
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+  let names: string[] = [];
+
+  const elems = document.querySelectorAll("[data-self-name]");
+  for (var i = 0; i < elems.length; i++) {
+    names = [...names, elems[i].innerHTML.toLowerCase()];
   }
+  names = Array.from(new Set(names));
+  console.log(names);
+
+  sendResponse(names.join(","));
 });

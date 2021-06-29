@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
 
-  "name": "Chrome Extension TypeScript Starter",
-  "description": "Chrome Extension, TypeScript, Visual Studio Code",
+  "name": "Member Sort Extension for Google Meet",
+  "description": "A extention for Google Meet",
   "version": "1.0",
 
   "options_ui": {
@@ -17,17 +17,12 @@
 
   "content_scripts": [
       {
-          "matches": ["<all_urls>"],
+          "matches": ["https://meet.google.com/*"],
           "js": ["js/vendor.js", "js/content_script.js"]
       }
   ],
 
-  "background": {
-    "scripts": ["js/vendor.js", "js/background.js"]
-  },
-
   "permissions": [
-    "storage",
-    "<all_urls>"
+    "storage"
   ]
 }
