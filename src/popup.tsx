@@ -4,7 +4,6 @@ import shuffle from "./helper/shuffle";
 
 const Popup = () => {
   // state
-  const [currentURL, setCurrentURL] = useState<string>("");
   const [user, setUser] = useState<string>("");
   const [status, setStatus] = useState<string>();
   const [currentTime, setCurrentTime] = useState<Date>();
