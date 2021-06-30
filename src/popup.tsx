@@ -91,11 +91,11 @@ const Popup = () => {
                 maxLength={20}
                 onChange={(e) => setUser(e.target.value)}
               />
+              <button style={{ marginLeft: "0.5rem" }} onClick={saveOptions}>
+                保存
+              </button>
             </div>
             <div>{status}</div>
-            <div>
-              <button onClick={saveOptions}>保存</button>
-            </div>
           </section>
           <section>
             <div>
