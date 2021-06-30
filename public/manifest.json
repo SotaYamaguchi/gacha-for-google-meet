@@ -5,11 +5,6 @@
   "description": "A extention for Google Meet",
   "version": "1.0",
 
-  "options_ui": {
-    "page": "options.html",
-    "chrome_style": true
-  },
-
   "browser_action": {
     "default_icon": "icon.png",
     "default_popup": "popup.html"
