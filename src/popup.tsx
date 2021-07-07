@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
+import { NOT_FOUND } from "./constants/common";
 import shuffle from "./helper/shuffle";
+import { getUserNamesByString } from "./utils/meetUtils";
+
+type ErrorMsgProps = {
+  errorText: string;
+};
+
+const ErrorMsg: React.FC<ErrorMsgProps> = ({ errorText }) => {
+  return <p style={{ color: "red" }}>{errorText}</p>;
+};
 
 const Popup = () => {
   // state
@@ -8,11 +18,7 @@ const Popup = () => {
   const [status, setStatus] = useState<string>();
   const [currentTime, setCurrentTime] = useState<Date>();
   const [members, setMembers] = useState<string[]>([]);
-  const [count, setCount] = useState<number>(0);
-
-  useEffect(() => {
-    chrome.browserAction.setBadgeText({ text: count.toString() });
-  }, [count]);
+  const [errorMsg, setErrorMsg] = useState<string>("");
 
   useEffect(() => {
     // Restores select box and checkbox state using the preferences
@@ -52,23 +58,20 @@ const Popup = () => {
           tab.id,
           undefined, // message は不要なため undefined とする
           (msg) => {
-            console.log("result message:", msg);
             if (typeof msg === "string") {
-              // 画面共有用のアカウントは省く
-              let membersName = msg;
-              if (user) {
-                // 名前が登録されている場合は置き換える
-                membersName = msg.split("あなた").join(user);
+              // validation
+              if (msg === NOT_FOUND) {
+                setErrorMsg(
+                  "Google Meet 画面の「全員を表示」ボタンをクリックしてください"
+                );
+                return;
               }
-              // 画面共有用のアカウントは省く
-              const pickMembers = membersName
-                .split(",")
-                .filter((x) => !x.includes("<wbr>"));
-              const shuffledMemcbers = shuffle(pickMembers);
+              setErrorMsg("");
+
+              const shuffledMemcbers = shuffle(getUserNamesByString(msg, user));
 
               setCurrentTime(new Date());
               setMembers(shuffledMemcbers);
-              setCount(shuffledMemcbers.length);
             }
           }
         );
@@ -102,6 +105,7 @@ const Popup = () => {
               <button onClick={getMemberList}>一覧取得</button>
             </div>
 
+            {!!errorMsg && <ErrorMsg errorText={errorMsg} />}
             {!!currentTime && (
               <div>Current Time: {currentTime.toLocaleTimeString()}</div>
             )}
