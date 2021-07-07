@@ -37,4 +37,36 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   names = Array.from(new Set(names));
 
   sendResponse(names.join(","));
+
+  // const ariaLabelElems = document.querySelectorAll("[aria-label]");
+
+  // // 全員とチャット drawer を表示
+  // let chatOpenButton;
+  // for (let i = 0; i < ariaLabelElems.length; i++) {
+  //   if (ariaLabelElems[i].getAttribute("aria-label") === "全員とチャット") {
+  //     chatOpenButton = ariaLabelElems[i] as HTMLButtonElement;
+  //     chatOpenButton.click();
+  //   }
+  // }
+
+  // // chat のメッセージ入力欄にシャッフル後のユーザーリストを入力
+  // const chatTextInputElem = document.querySelector(
+  //   '[name="chatTextInput"]'
+  // ) as HTMLTextAreaElement;
+  // const shuffledMemcbers = shuffle(
+  //   getUserNamesByString(names.join(","), "テスト　ユーザー名")
+  // ).join("\n");
+  // console.log(chatTextInputElem);
+  // chatTextInputElem.value = shuffledMemcbers;
+
+  // // chat に入力したメッセージを送信
+  // let chatMsgSendButton;
+  // const buttons = document.getElementsByTagName("button");
+  // for (let i = 0; i < buttons.length; i++) {
+  //   const label = buttons[i].getAttribute("aria-label");
+  //   if (label === "参加者全員にメッセージを送信") {
+  //     chatMsgSendButton = buttons[i] as HTMLButtonElement;
+  //   }
+  // }
+  // chatMsgSendButton?.click();
 });
