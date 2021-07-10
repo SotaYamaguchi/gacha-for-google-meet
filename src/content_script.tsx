@@ -1,4 +1,8 @@
-import { NOT_FOUND } from "./constants/common";
+import {
+  ALL_USER_BUTTON_LABEL,
+  NOT_FOUND,
+  OPEN_ALL_USER_DRAWER,
+} from "./constants/common";
 
 type NodeName = "DIV" | "SPAN";
 
@@ -20,9 +24,24 @@ const findUserNameFromElm = (parentElm: Element) => {
   return childSpans[0].innerHTML.toLowerCase();
 };
 
-chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-  let names: string[] = [];
+const openAllUserDrawer = () => {
+  /*
+   * 各ボタンの aria-label 属性にラベルに表示するボタン名が格納されている
+   * 全てのボタンを DOM から取得して全員を表示ボタンを探す
+   */
+  const ariaLabelElems = document.querySelectorAll("[aria-label]");
+  for (let i = 0; i < ariaLabelElems.length; i++) {
+    if (
+      ariaLabelElems[i].getAttribute("aria-label") === ALL_USER_BUTTON_LABEL
+    ) {
+      const chatOpenButton = ariaLabelElems[i] as HTMLButtonElement;
+      chatOpenButton.click();
+    }
+  }
+};
 
+const getUserNameList = (sendResponse: (response?: any) => void) => {
+  let names: string[] = [];
   const elems = document.querySelectorAll(".cylMye");
   if (!elems.length) {
     // .cylMye が存在しない = 全員を表示 drawer が表示されていない
@@ -34,6 +53,15 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   }
   // 重複した名前を省く
   names = Array.from(new Set(names));
-
   sendResponse(names.join(","));
+};
+
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+  if (msg === OPEN_ALL_USER_DRAWER) {
+    console.log(OPEN_ALL_USER_DRAWER);
+    openAllUserDrawer();
+    return;
+  }
+
+  getUserNameList(sendResponse);
 });

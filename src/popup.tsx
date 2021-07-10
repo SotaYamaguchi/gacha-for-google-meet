@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
-import { NOT_FOUND } from "./constants/common";
+import { NOT_FOUND, OPEN_ALL_USER_DRAWER } from "./constants/common";
 import shuffle from "./helper/shuffle";
 
 type ErrorMsgProps = {
@@ -17,33 +17,45 @@ const Popup = () => {
   const [members, setMembers] = useState<string[]>([]);
   const [errorMsg, setErrorMsg] = useState<string>("");
 
-  const getMemberList = () => {
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+  const currentChromeTab = (callback: (tabId: number) => void) => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       // 現在表示しているタブを取得
       const tab = tabs[0];
       if (tab.id) {
-        chrome.tabs.sendMessage(
-          tab.id,
-          undefined, // message は不要なため undefined とする
-          (msg) => {
-            if (typeof msg === "string") {
-              // validation
-              if (msg === NOT_FOUND) {
-                setErrorMsg(
-                  "Google Meet 画面の「全員を表示」ボタンをクリックしてください"
-                );
-                return;
-              }
-              setErrorMsg("");
-
-              const shuffledMemcbers = shuffle(msg.split(","));
-
-              setCurrentTime(new Date());
-              setMembers(shuffledMemcbers);
-            }
-          }
-        );
+        callback(tab.id);
       }
+    });
+  };
+
+  const openAllUserDrawer = () => {
+    currentChromeTab((tabId) => {
+      chrome.tabs.sendMessage(tabId, OPEN_ALL_USER_DRAWER, (msg) => {
+        setErrorMsg("");
+      });
+    });
+  };
+
+  const getMemberList = () => {
+    currentChromeTab((tabId) => {
+      chrome.tabs.sendMessage(
+        tabId,
+        undefined, // message は不要なため undefined とする
+        (msg) => {
+          if (typeof msg === "string") {
+            // validation
+            if (msg === NOT_FOUND) {
+              setErrorMsg("Google Meet 画面の「全員を表示」を開いてください");
+              return;
+            }
+            setErrorMsg("");
+
+            const shuffledMembers = shuffle(msg.split(","));
+
+            setCurrentTime(new Date());
+            setMembers(shuffledMembers);
+          }
+        }
+      );
     });
   };
 
@@ -61,7 +73,14 @@ const Popup = () => {
               <button onClick={getMemberList}>一覧取得</button>
             </div>
 
-            {!!errorMsg && <ErrorMsg errorText={errorMsg} />}
+            {!!errorMsg && (
+              <>
+                <ErrorMsg errorText={errorMsg} />
+                <div>
+                  <button onClick={openAllUserDrawer}>開く</button>
+                </div>
+              </>
+            )}
             {!!currentTime && (
               <div>Current Time: {currentTime.toLocaleTimeString()}</div>
             )}
