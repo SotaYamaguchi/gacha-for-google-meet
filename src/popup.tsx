@@ -1,21 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
-import { NOT_FOUND, OPEN_ALL_USER_DRAWER } from "./constants/common";
 import shuffle from "./helper/shuffle";
-
-type ErrorMsgProps = {
-  errorText: string;
-};
-
-const ErrorMsg: React.FC<ErrorMsgProps> = ({ errorText }) => {
-  return <p style={{ color: "red" }}>{errorText}</p>;
-};
 
 const Popup = () => {
   // state
   const [currentTime, setCurrentTime] = useState<Date>();
   const [members, setMembers] = useState<string[]>([]);
-  const [errorMsg, setErrorMsg] = useState<string>("");
 
   const currentChromeTab = (callback: (tabId: number) => void) => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -27,14 +17,6 @@ const Popup = () => {
     });
   };
 
-  const openAllUserDrawer = () => {
-    currentChromeTab((tabId) => {
-      chrome.tabs.sendMessage(tabId, OPEN_ALL_USER_DRAWER, (msg) => {
-        setErrorMsg("");
-      });
-    });
-  };
-
   const getMemberList = () => {
     currentChromeTab((tabId) => {
       chrome.tabs.sendMessage(
@@ -42,15 +24,7 @@ const Popup = () => {
         undefined, // message は不要なため undefined とする
         (msg) => {
           if (typeof msg === "string") {
-            // validation
-            if (msg === NOT_FOUND) {
-              setErrorMsg("Google Meet 画面の「全員を表示」を開いてください");
-              return;
-            }
-            setErrorMsg("");
-
             const shuffledMembers = shuffle(msg.split(","));
-
             setCurrentTime(new Date());
             setMembers(shuffledMembers);
           }
@@ -58,6 +32,14 @@ const Popup = () => {
       );
     });
   };
+
+  // init
+  useEffect(() => {
+    currentChromeTab((tabId) => {
+      // ユーザー一覧 drawer を表示させる
+      chrome.tabs.sendMessage(tabId, undefined);
+    });
+  }, []);
 
   return (
     <>
@@ -73,14 +55,6 @@ const Popup = () => {
               <button onClick={getMemberList}>一覧取得</button>
             </div>
 
-            {!!errorMsg && (
-              <>
-                <ErrorMsg errorText={errorMsg} />
-                <div>
-                  <button onClick={openAllUserDrawer}>開く</button>
-                </div>
-              </>
-            )}
             {!!currentTime && (
               <div>Current Time: {currentTime.toLocaleTimeString()}</div>
             )}

@@ -1,8 +1,4 @@
-import {
-  ALL_USER_BUTTON_LABEL,
-  NOT_FOUND,
-  OPEN_ALL_USER_DRAWER,
-} from "./constants/common";
+import { ALL_USER_BUTTON_LABEL } from "./constants/common";
 
 type NodeName = "DIV" | "SPAN";
 
@@ -44,8 +40,8 @@ const getUserNameList = (sendResponse: (response?: any) => void) => {
   let names: string[] = [];
   const elems = document.querySelectorAll(".cylMye");
   if (!elems.length) {
-    // .cylMye が存在しない = 全員を表示 drawer が表示されていない
-    sendResponse(NOT_FOUND);
+    // .cylMye が存在しない = ユーザー一覧 drawer が表示されていない
+    openAllUserDrawer();
     return;
   }
   for (let i = 0; i < elems.length; i++) {
@@ -57,11 +53,5 @@ const getUserNameList = (sendResponse: (response?: any) => void) => {
 };
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-  if (msg === OPEN_ALL_USER_DRAWER) {
-    console.log(OPEN_ALL_USER_DRAWER);
-    openAllUserDrawer();
-    return;
-  }
-
   getUserNameList(sendResponse);
 });
