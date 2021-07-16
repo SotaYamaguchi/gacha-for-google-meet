@@ -24,14 +24,31 @@ jobs:
         run: |
           cd dist
           zip release *.*
+      # 同じ日に 2 回目以上のデプロイが走った場合はタグを YYYY-mm-dd-n とする
+      - name: Create new tag
+        id: create_tag
+        env:
+          TZ: 'Asia/Tokyo'
+        run: |
+          TODAY=$(date +'%Y-%m-%d')
+          COUNT=`git tag -l "$TODAY*" | wc -l`
+          if [ $COUNT -gt 0 ] ; then
+            NEW_TAG="$TODAY-$((COUNT += 1))"
+          else
+            NEW_TAG=$TODAY
+          fi
+          echo "::set-output name=date::$TODAY"
+          echo "::set-output name=time::$(date +'%H:%M:%S')"
+          echo "::set-output name=new_tag::$NEW_TAG"
       - name: create release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: ${{ steps.create_tag.outputs.new_tag }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{ steps.create_tag.outputs.new_tag }}
+          release_name: "Release ${{ steps.create_tag.outputs.new_tag }}"
           draft: false
           prerelease: false
       - name: upload Release Asset
