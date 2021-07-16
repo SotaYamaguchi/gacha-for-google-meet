@@ -17,29 +17,25 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+      - uses: actions/setup-node@v2-beta
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: '15'
       - name: yarn install & build
         run: |
           yarn
           yarn build --if-present
-      - name: Zip output
+      - name: zip output
         run: |
+          mkdir output
           cd output
           zip release *.*
-      - name: Create Release
+      - name: create release
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
-          body: |
-            Changes in this Release
-            - First Change
-            - Second Change
           draft: false
           prerelease: false
