@@ -1,5 +1,21 @@
 # Member Sort Extension for Google Meet
 
+![image](https://user-images.githubusercontent.com/24993603/124685156-aae99080-df0b-11eb-94fd-aa7fcdc861e8.png)
+
+## 使い方
+
+- `dist` ディレクトリが生成されていること
+
+  - `dist` ディレクトリがない場合は下に記載のある Setup・Build を実行する
+
+- `chrome://extensions/` にアクセスし、「パッケージ化されていない拡張機能を取り込む」をクリック
+
+- `chrome-extension-typescript-starter/dist` ディレクトリを取り込む
+
+ここまで行うと chrome の拡張機能に表示されます
+
+---
+
 <!-- ![build](https://github.com/chibat/chrome-extension-typescript-starter/workflows/build/badge.svg) -->
 
 Chrome Extension, TypeScript and Visual Studio Code

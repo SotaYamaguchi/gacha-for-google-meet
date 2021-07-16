@@ -3,7 +3,7 @@
 
   "name": "Member Sort Extension for Google Meet",
   "description": "A extention for Google Meet",
-  "version": "1.0",
+  "version": "0.1.0",
 
   "browser_action": {
     "default_icon": "icon.png",
@@ -15,10 +15,5 @@
           "matches": ["https://meet.google.com/*"],
           "js": ["js/vendor.js", "js/content_script.js"]
       }
-  ],
-
-  "permissions": [
-    "storage",
-    "<all_urls>"
   ]
 }

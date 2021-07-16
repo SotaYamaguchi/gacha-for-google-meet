@@ -1,83 +1,45 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
-import { NOT_FOUND } from "./constants/common";
 import shuffle from "./helper/shuffle";
-import { getUserNamesByString } from "./utils/meetUtils";
-
-type ErrorMsgProps = {
-  errorText: string;
-};
-
-const ErrorMsg: React.FC<ErrorMsgProps> = ({ errorText }) => {
-  return <p style={{ color: "red" }}>{errorText}</p>;
-};
 
 const Popup = () => {
   // state
-  const [user, setUser] = useState<string>("");
-  const [status, setStatus] = useState<string>();
   const [currentTime, setCurrentTime] = useState<Date>();
   const [members, setMembers] = useState<string[]>([]);
-  const [errorMsg, setErrorMsg] = useState<string>("");
 
-  useEffect(() => {
-    // Restores select box and checkbox state using the preferences
-    // stored in chrome.storage.
-    chrome.storage.sync.get(
-      {
-        user: "",
-      },
-      (items) => {
-        setUser(items.user);
-      }
-    );
-  }, []);
-
-  const saveOptions = () => {
-    // Saves options to chrome.storage.sync.
-    chrome.storage.sync.set(
-      {
-        user: user,
-      },
-      () => {
-        // Update status to let user know options were saved.
-        setStatus("Options saved.");
-        const id = setTimeout(() => {
-          setStatus(undefined);
-        }, 1000);
-        return () => clearTimeout(id);
-      }
-    );
-  };
-
-  const getMemberList = () => {
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+  const currentChromeTab = (callback: (tabId: number) => void) => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      // 現在表示しているタブを取得
       const tab = tabs[0];
       if (tab.id) {
-        chrome.tabs.sendMessage(
-          tab.id,
-          undefined, // message は不要なため undefined とする
-          (msg) => {
-            if (typeof msg === "string") {
-              // validation
-              if (msg === NOT_FOUND) {
-                setErrorMsg(
-                  "Google Meet 画面の「全員を表示」ボタンをクリックしてください"
-                );
-                return;
-              }
-              setErrorMsg("");
-
-              const shuffledMemcbers = shuffle(getUserNamesByString(msg, user));
-
-              setCurrentTime(new Date());
-              setMembers(shuffledMemcbers);
-            }
-          }
-        );
+        callback(tab.id);
       }
     });
   };
+
+  const getMemberList = () => {
+    currentChromeTab((tabId) => {
+      chrome.tabs.sendMessage(
+        tabId,
+        undefined, // message は不要なため undefined とする
+        (msg) => {
+          if (typeof msg === "string") {
+            const shuffledMembers = shuffle(msg.split(","));
+            setCurrentTime(new Date());
+            setMembers(shuffledMembers);
+          }
+        }
+      );
+    });
+  };
+
+  // init
+  useEffect(() => {
+    currentChromeTab((tabId) => {
+      // ユーザー一覧 drawer を表示させる
+      chrome.tabs.sendMessage(tabId, undefined);
+    });
+  }, []);
 
   return (
     <>
@@ -85,27 +47,14 @@ const Popup = () => {
         <div style={{ minWidth: "300px", padding: "1rem" }}>
           <section style={{ marginBottom: "1rem" }}>
             <div>
-              あなたの名前:&nbsp;
-              <input
-                type="text"
-                id="user"
-                name="user"
-                value={user}
-                maxLength={20}
-                onChange={(e) => setUser(e.target.value)}
-              />
-              <button style={{ marginLeft: "0.5rem" }} onClick={saveOptions}>
-                保存
-              </button>
+              現在 Meet に参加しているメンバーを並び替えて一覧表示します
             </div>
-            <div>{status}</div>
           </section>
           <section>
             <div>
               <button onClick={getMemberList}>一覧取得</button>
             </div>
 
-            {!!errorMsg && <ErrorMsg errorText={errorMsg} />}
             {!!currentTime && (
               <div>Current Time: {currentTime.toLocaleTimeString()}</div>
             )}

@@ -1,1 +1,1 @@
-export const NOT_FOUND = "NotFound";
+export const ALL_USER_BUTTON_LABEL = "全員を表示";
