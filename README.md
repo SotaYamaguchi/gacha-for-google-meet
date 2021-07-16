@@ -1,5 +1,9 @@
 # Member Sort Extension for Google Meet
 
+![build](https://github.com/SotaYamaguchi/member-sort-extension-for-google-meet/workflows/build/badge.svg)
+
+[chrome-extention.zip](https://github.com/SotaYamaguchi/member-sort-extension-for-google-meet/releases)
+
 ![image](https://user-images.githubusercontent.com/24993603/124685156-aae99080-df0b-11eb-94fd-aa7fcdc861e8.png)
 
 ## 使い方
@@ -15,8 +19,6 @@
 ここまで行うと chrome の拡張機能に表示されます
 
 ---
-
-<!-- ![build](https://github.com/chibat/chrome-extension-typescript-starter/workflows/build/badge.svg) -->
 
 Chrome Extension, TypeScript and Visual Studio Code
 
