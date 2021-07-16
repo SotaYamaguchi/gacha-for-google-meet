@@ -1,0 +1,67 @@
+name: build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: '15'
+      - name: yarn install & build
+        run: |
+          yarn
+          yarn build --if-present
+      - name: zip output
+        run: |
+          cd dist
+          zip release *.*
+      # 同じ日に 2 回目以上のデプロイが走った場合はタグを YYYY-mm-dd-n とする
+      - name: Create new tag
+        id: create_tag
+        env:
+          TZ: 'Asia/Tokyo'
+        run: |
+          TODAY=$(date +'%Y-%m-%d')
+          COUNT=`git tag -l "$TODAY*" | wc -l`
+          if [ $COUNT -gt 0 ] ; then
+            NEW_TAG="$TODAY-$((COUNT += 1))"
+          else
+            NEW_TAG=$TODAY
+          fi
+          echo "::set-output name=date::$TODAY"
+          echo "::set-output name=time::$(date +'%H:%M:%S')"
+          echo "::set-output name=new_tag::$NEW_TAG"
+      - name: create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: ${{ steps.create_tag.outputs.new_tag }}
+        with:
+          tag_name: ${{ steps.create_tag.outputs.new_tag }}
+          release_name: "Release ${{ steps.create_tag.outputs.new_tag }}"
+          draft: false
+          prerelease: false
+      - name: upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist/release.zip
+          asset_name: chrome-extention.zip
+          asset_content_type: application/zip
