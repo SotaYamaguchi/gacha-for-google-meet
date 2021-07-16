@@ -26,8 +26,7 @@ jobs:
           yarn build --if-present
       - name: zip output
         run: |
-          mkdir output
-          cd output
+          cd dist
           zip release *.*
       - name: create release
         id: create_release
