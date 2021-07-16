@@ -1,10 +1,12 @@
 name: build
 
 on:
-  push:
-    branches: [ master ]
+  # プルリクから master に merge されたら実行する
   pull_request:
-    branches: [ master ]
+    branches:
+      - master
+    types:
+      - closed
 
 jobs:
   build:
