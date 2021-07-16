@@ -42,52 +42,33 @@ const Popup = () => {
   }, []);
 
   return (
-    <>
-      <div>
-        <div style={{ minWidth: "300px", padding: "1rem" }}>
-          <section style={{ marginBottom: "1rem" }}>
+    <div>
+      <div style={{ minWidth: "300px", padding: "1rem" }}>
+        <section style={{ marginBottom: "1rem" }}>
+          <div>現在 Meet に参加しているメンバーを並び替えて一覧表示します</div>
+        </section>
+        <section>
+          <div>
+            <button onClick={getMemberList}>一覧取得</button>
+          </div>
+          {!!currentTime && (
+            <div>Current Time: {currentTime.toLocaleTimeString()}</div>
+          )}
+          {!!members.length && (
             <div>
-              現在 Meet に参加しているメンバーを並び替えて一覧表示します
-            </div>
-          </section>
-          <section>
-            <div>
-              <button onClick={getMemberList}>一覧取得</button>
-            </div>
-
-            {!!currentTime && (
-              <div>Current Time: {currentTime.toLocaleTimeString()}</div>
-            )}
-            {!!members.length && (
-              <div>
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  <p>参加メンバー</p>
-                  <ul style={{ listStyle: "none" }}>
-                    {members.map((x, i) => (
-                      <li key={i}>{`${i + 1}. ${x}`}</li>
-                    ))}
-                  </ul>
-                </div>
-
-            {!!currentTime && (
-              <div>Current Time: {currentTime.toLocaleTimeString()}</div>
-            )}
-            {!!members.length && (
-              <div>
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  <p>参加メンバー</p>
-                  <ul style={{ listStyle: "none" }}>
-                    {members.map((x, i) => (
-                      <li key={i}>{`${i + 1}. ${x}`}</li>
-                    ))}
-                  </ul>
-                </div>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <p>参加メンバー</p>
+                <ul style={{ listStyle: "none" }}>
+                  {members.map((x, i) => (
+                    <li key={i}>{`${i + 1}. ${x}`}</li>
+                  ))}
+                </ul>
               </div>
-            )}
-          </section>
-        </div>
+            </div>
+          )}
+        </section>
       </div>
-    </>
+    </div>
   );
 };
 
