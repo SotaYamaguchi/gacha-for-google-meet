@@ -28,6 +28,14 @@ jobs:
         run: |
           cd dist
           zip release *.*
+      - uses: octokit/request-action@v2.x
+        id: get_tags
+        with:
+          route: GET /repos/{owner}/{repo}/git/matching-refs/tags
+          owner: SotaYamaguchi
+          repo: shuffle-members-extension-for-google-meet
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # 同じ日に 2 回目以上のデプロイが走った場合はタグを YYYY-mm-dd-n とする
       - name: Create new tag
         id: create_tag
@@ -35,7 +43,7 @@ jobs:
           TZ: 'Asia/Tokyo'
         run: |
           TODAY=$(date +'%Y-%m-%d')
-          COUNT=`git tag -l "$TODAY*" | wc -l`
+          COUNT=`echo "${{ steps.get_tags.outputs.data }}" | grep "ref: refs/tags/" | grep "$TODAY" | wc -l`
           if [ $COUNT -gt 0 ] ; then
             NEW_TAG="$TODAY-$((COUNT += 1))"
           else
