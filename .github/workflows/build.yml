@@ -38,7 +38,7 @@ jobs:
         run: |
           TODAY=$(date +'%Y-%m-%d')
           COUNT=`git tag -l "$TODAY*" | wc -l`
-          TAGS=`git tag`
+          TAGS=`git tag | grep "$TODAY*"`
           LOGS=`git log --oneline -5`
           echo $TAGS
           echo $LOGS
