@@ -38,6 +38,8 @@ jobs:
         run: |
           TODAY=$(date +'%Y-%m-%d')
           COUNT=`git tag -l "$TODAY*" | wc -l`
+          echo TODAY
+          echo COUNT
           if [ $COUNT -gt 0 ] ; then
             NEW_TAG="$TODAY-$((COUNT += 1))"
           else
