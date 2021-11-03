@@ -46,12 +46,9 @@ jobs:
           echo "::set-output name=date::$TODAY"
           echo "::set-output name=time::$(date +'%H:%M:%S')"
           echo "::set-output name=new_tag::$NEW_TAG"
-      - name: echo Created new tag
-          id: echo_create_tag
-          env:
-            TZ: 'Asia/Tokyo'
-          run: |
-            echo "${{ steps.create_tag.outputs.new_tag }}"
+      - name: Test Created new tag
+        run: |
+          echo "Release ${{ steps.create_tag.outputs.new_tag }}"
 #      - name: create release
 #        id: create_release
 #        uses: actions/create-release@v1
