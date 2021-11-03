@@ -38,7 +38,6 @@ jobs:
         run: |
           TODAY=$(date +'%Y-%m-%d')
           COUNT=`git tag -l "$TODAY*" | wc -l`
-#          debug
           echo `git tag -l "$TODAY*"`
           echo $TODAY
           echo $COUNT
