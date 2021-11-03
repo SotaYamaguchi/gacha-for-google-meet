@@ -1,8 +1,8 @@
-# Member Sort Extension for Google Meet
+# Shuffle Members Extension for Google Meet
 
-[![build](https://github.com/SotaYamaguchi/member-sort-extension-for-google-meet/actions/workflows/build.yml/badge.svg)](https://github.com/SotaYamaguchi/member-sort-extension-for-google-meet/actions/workflows/build.yml)
+[![build](https://github.com/SotaYamaguchi/shuffle-members-extension-for-google-meet/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/SotaYamaguchi/shuffle-members-extension-for-google-meet/actions/workflows/build.yml)
 
-[chrome-extention.zip](https://github.com/SotaYamaguchi/member-sort-extension-for-google-meet/releases)
+[chrome-extention.zip](https://github.com/SotaYamaguchi/shuffle-members-extension-for-google-meet/releases)
 
 ![image](https://user-images.githubusercontent.com/24993603/124685156-aae99080-df0b-11eb-94fd-aa7fcdc861e8.png)
 
