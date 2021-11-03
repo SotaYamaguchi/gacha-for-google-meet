@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
 
-  "name": "Member Sort Extension for Google Meet",
+  "name": "Shuffle Members Extension for Google Meet",
   "description": "A extention for Google Meet",
-  "version": "0.1.0",
+  "version": "0.1.1",
 
   "browser_action": {
     "default_icon": "icon.png",
