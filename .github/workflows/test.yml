@@ -6,7 +6,7 @@ on:
       - fix/build_action
 
 jobs:
-  build:
+  test:
 
     runs-on: ubuntu-latest
 
