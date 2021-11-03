@@ -1,6 +1,6 @@
 # Member Sort Extension for Google Meet
 
-![build](https://github.com/SotaYamaguchi/member-sort-extension-for-google-meet/workflows/build/badge.svg)
+[![build](https://github.com/SotaYamaguchi/member-sort-extension-for-google-meet/actions/workflows/build.yml/badge.svg)](https://github.com/SotaYamaguchi/member-sort-extension-for-google-meet/actions/workflows/build.yml)
 
 [chrome-extention.zip](https://github.com/SotaYamaguchi/member-sort-extension-for-google-meet/releases)
 
