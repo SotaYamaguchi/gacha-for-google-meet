@@ -3,14 +3,12 @@ name: build
 on:
   push:
     branches:
-      - fix/build_action
-#    branches:
-#      - main
-#  pull_request:
-#    branches:
-#      - main
-#    types:
-#      - closed
+      - main
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
 
 jobs:
   build:
@@ -22,16 +20,16 @@ jobs:
       - uses: actions/setup-node@v2-beta
         with:
           node-version: '15'
-#      - name: yarn install & build
-#        run: |
-#          yarn
-#          yarn build --if-present
-#      - name: zip output
-#        run: |
-#          cd dist
-#          zip release *.*
       - name: Setup tmate session
           uses: mxschmitt/action-tmate@v3
+      - name: yarn install & build
+        run: |
+          yarn
+          yarn build --if-present
+      - name: zip output
+        run: |
+          cd dist
+          zip release *.*
       # 同じ日に 2 回目以上のデプロイが走った場合はタグを YYYY-mm-dd-n とする
       - name: Create new tag
         id: create_tag
@@ -40,10 +38,6 @@ jobs:
         run: |
           TODAY=$(date +'%Y-%m-%d')
           COUNT=`git tag -l "$TODAY*" | wc -l`
-          echo `git tag | grep "$TODAY"`
-          echo $TODAY
-          echo $COUNT
-
           if [ $COUNT -gt 0 ] ; then
             NEW_TAG="$TODAY-$((COUNT += 1))"
           else
@@ -52,27 +46,24 @@ jobs:
           echo "::set-output name=date::$TODAY"
           echo "::set-output name=time::$(date +'%H:%M:%S')"
           echo "::set-output name=new_tag::$NEW_TAG"
-      - name: Test Created new tag
-        run: |
-          echo "Release ${{ steps.create_tag.outputs.new_tag }}"
-#      - name: create release
-#        id: create_release
-#        uses: actions/create-release@v1
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        if: ${{ steps.create_tag.outputs.new_tag }}
-#        with:
-#          tag_name: ${{ steps.create_tag.outputs.new_tag }}
-#          release_name: "Release ${{ steps.create_tag.outputs.new_tag }}"
-#          draft: false
-#          prerelease: false
-#      - name: upload Release Asset
-#        id: upload-release-asset
-#        uses: actions/upload-release-asset@v1
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          upload_url: ${{ steps.create_release.outputs.upload_url }}
-#          asset_path: ./dist/release.zip
-#          asset_name: chrome-extention.zip
-#          asset_content_type: application/zip
+      - name: create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: ${{ steps.create_tag.outputs.new_tag }}
+        with:
+          tag_name: ${{ steps.create_tag.outputs.new_tag }}
+          release_name: "Release ${{ steps.create_tag.outputs.new_tag }}"
+          draft: false
+          prerelease: false
+      - name: upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist/release.zip
+          asset_name: chrome-extention.zip
+          asset_content_type: application/zip
