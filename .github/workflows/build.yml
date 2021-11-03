@@ -22,14 +22,14 @@ jobs:
       - uses: actions/setup-node@v2-beta
         with:
           node-version: '15'
-      - name: yarn install & build
-        run: |
-          yarn
-          yarn build --if-present
-      - name: zip output
-        run: |
-          cd dist
-          zip release *.*
+#      - name: yarn install & build
+#        run: |
+#          yarn
+#          yarn build --if-present
+#      - name: zip output
+#        run: |
+#          cd dist
+#          zip release *.*
       # 同じ日に 2 回目以上のデプロイが走った場合はタグを YYYY-mm-dd-n とする
       - name: Create new tag
         id: create_tag
