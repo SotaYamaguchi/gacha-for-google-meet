@@ -35,6 +35,7 @@ jobs:
         id: create_tag
         env:
           TZ: 'Asia/Tokyo'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           TODAY=$(date +'%Y-%m-%d')
           COUNT=`git tag -l "$TODAY*" | wc -l`
