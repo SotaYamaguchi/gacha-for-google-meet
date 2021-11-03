@@ -20,8 +20,6 @@ jobs:
       - uses: actions/setup-node@v2-beta
         with:
           node-version: '15'
-      - name: Setup tmate session
-          uses: mxschmitt/action-tmate@v3
       - name: yarn install & build
         run: |
           yarn
