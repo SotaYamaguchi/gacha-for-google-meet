@@ -6,7 +6,7 @@
 
 [chrome-extention.zip](https://github.com/SotaYamaguchi/shuffle-members-extension-for-google-meet/releases)
 
-![image](https://user-images.githubusercontent.com/24993603/124685156-aae99080-df0b-11eb-94fd-aa7fcdc861e8.png)
+![image](https://user-images.githubusercontent.com/24993603/140242306-097d7d79-9df7-4bd5-8988-10e2a039b23d.png)
 
 ## 使い方
 
