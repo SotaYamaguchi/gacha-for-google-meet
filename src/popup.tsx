@@ -33,11 +33,24 @@ const Popup = () => {
     });
   };
 
+  const sleep = (waitTime: number) =>
+    new Promise((resolve) => setTimeout(resolve, waitTime));
+
+  const initialize = async () => {
+    // 初回はユーザー一覧 drawer のレンダリングを待つため sleep を入れる
+    await sleep(300);
+    getMemberList();
+  };
+
   // init
   useEffect(() => {
     currentChromeTab((tabId) => {
       // ユーザー一覧 drawer を表示させる
-      chrome.tabs.sendMessage(tabId, undefined);
+      chrome.tabs.sendMessage(
+        tabId,
+        undefined, // message は不要なため undefined とする
+        () => initialize()
+      );
     });
   }, []);
 
@@ -49,10 +62,12 @@ const Popup = () => {
         </section>
         <section>
           <div>
-            <button onClick={getMemberList}>一覧取得</button>
+            <button onClick={getMemberList}>Shuffle</button>
           </div>
           {!!currentTime && (
-            <div>Current Time: {currentTime.toLocaleTimeString()}</div>
+            <div style={{ marginTop: "0.5rem" }}>
+              Current Time: {currentTime.toLocaleTimeString()}
+            </div>
           )}
           {!!members.length && (
             <div>
