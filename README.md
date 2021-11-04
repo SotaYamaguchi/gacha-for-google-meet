@@ -1,5 +1,7 @@
 # Shuffle Members Extension for Google Meet
 
+![image](./public/icon.png)
+
 [![build](https://github.com/SotaYamaguchi/shuffle-members-extension-for-google-meet/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/SotaYamaguchi/shuffle-members-extension-for-google-meet/actions/workflows/build.yml)
 
 [chrome-extention.zip](https://github.com/SotaYamaguchi/shuffle-members-extension-for-google-meet/releases)
@@ -14,7 +16,7 @@
 
 - `chrome://extensions/` にアクセスし、「パッケージ化されていない拡張機能を取り込む」をクリック
 
-- `chrome-extension-typescript-starter/dist` ディレクトリを取り込む
+- `shuffle-members-extension-for-google-meet/dist` ディレクトリを取り込む
 
 ここまで行うと chrome の拡張機能に表示されます
 
