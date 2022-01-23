@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { RedoIcon } from "./components/atoms/RedoIcon";
+import { SEND_MESSAGES } from "./constants/commons";
 import shuffle from "./helper/shuffle";
+
+type CurrentChromeTab = (callback: (tabId: number) => void) => void;
+type GetMemberList = () => void;
+type OpenChatOnMeet = () => void;
 
 const Popup = () => {
   // state
   const [currentTime, setCurrentTime] = useState<Date>();
   const [members, setMembers] = useState<string[]>([]);
 
-  const currentChromeTab = (callback: (tabId: number) => void) => {
+  const currentChromeTab: CurrentChromeTab = (callback) => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       // 現在表示しているタブを取得
       const tab = tabs[0];
@@ -18,19 +23,28 @@ const Popup = () => {
     });
   };
 
-  const getMemberList = () => {
+  const getMemberList: GetMemberList = () => {
     currentChromeTab((tabId) => {
       chrome.tabs.sendMessage(
         tabId,
         undefined, // message は不要なため undefined とする
-        (msg) => {
+        async (msg) => {
           if (typeof msg === "string") {
             const shuffledMembers = shuffle(msg.split(","));
             setCurrentTime(new Date());
             setMembers(shuffledMembers);
+
+            await sleep(300);
+            openChatOnMeet();
           }
         }
       );
+    });
+  };
+
+  const openChatOnMeet: OpenChatOnMeet = () => {
+    currentChromeTab((tabId) => {
+      chrome.tabs.sendMessage(tabId, SEND_MESSAGES.CHAT_OPEN);
     });
   };
 
