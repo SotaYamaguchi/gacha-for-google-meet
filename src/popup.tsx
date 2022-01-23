@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
+import { RedoIcon } from "./components/atoms/RedoIcon";
+import { NotDetected } from "./components/NotDetected";
+import { SEND_MESSAGES } from "./constants/commons";
 import shuffle from "./helper/shuffle";
+
+const meetURL = "https://meet.google.com/";
+
+type CurrentChromeTab = (callback: (tabId: number) => void) => void;
+type GetMemberList = () => void;
+type OpenChatOnMeet = () => void;
 
 const Popup = () => {
   // state
   const [currentTime, setCurrentTime] = useState<Date>();
   const [members, setMembers] = useState<string[]>([]);
 
-  const currentChromeTab = (callback: (tabId: number) => void) => {
+  const currentChromeTab: CurrentChromeTab = (callback) => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       // 現在表示しているタブを取得
       const tab = tabs[0];
@@ -17,19 +26,28 @@ const Popup = () => {
     });
   };
 
-  const getMemberList = () => {
+  const getMemberList: GetMemberList = () => {
     currentChromeTab((tabId) => {
       chrome.tabs.sendMessage(
         tabId,
         undefined, // message は不要なため undefined とする
-        (msg) => {
+        async (msg) => {
           if (typeof msg === "string") {
             const shuffledMembers = shuffle(msg.split(","));
             setCurrentTime(new Date());
             setMembers(shuffledMembers);
+
+            await sleep(300);
+            openChatOnMeet();
           }
         }
       );
+    });
+  };
+
+  const openChatOnMeet: OpenChatOnMeet = () => {
+    currentChromeTab((tabId) => {
+      chrome.tabs.sendMessage(tabId, SEND_MESSAGES.CHAT_OPEN);
     });
   };
 
@@ -41,6 +59,11 @@ const Popup = () => {
     await sleep(300);
     getMemberList();
   };
+
+  if (!window.location.pathname.includes(meetURL)) {
+    // Only available in meet
+    return <NotDetected />;
+  }
 
   // init
   useEffect(() => {
@@ -62,7 +85,15 @@ const Popup = () => {
         </section>
         <section>
           <div>
-            <button onClick={getMemberList}>Shuffle</button>
+            <button
+              onClick={getMemberList}
+              style={{ display: "flex", padding: "0.5rem 1rem" }}
+            >
+              Shuffle
+              <div style={{ marginLeft: "0.5rem" }}>
+                <RedoIcon />
+              </div>
+            </button>
           </div>
           {!!currentTime && (
             <div style={{ marginTop: "0.5rem" }}>
