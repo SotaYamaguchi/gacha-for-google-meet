@@ -21,9 +21,9 @@ const findUserNameFromElm: FindUserNameFromElm = (parentElm) => {
 };
 
 const openDrawer: OpenDrawer = (buttonLabel) => {
-  if (openedDrawersLabels.find(label => label === buttonLabel)) {
+  if (openedDrawersLabels.find((label) => label === buttonLabel)) {
     // 既に開いたドロワーは再度開く必要がないため処理をスキップする
-    return
+    return;
   }
   /*
    * 各ボタンの aria-label 属性にラベルに表示するボタン名が格納されている

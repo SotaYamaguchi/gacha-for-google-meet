@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { RedoIcon } from "./components/atoms/RedoIcon";
+import { NotDetected } from "./components/NotDetected";
 import { SEND_MESSAGES } from "./constants/commons";
 import shuffle from "./helper/shuffle";
+
+const meetURL = "https://meet.google.com/";
 
 type CurrentChromeTab = (callback: (tabId: number) => void) => void;
 type GetMemberList = () => void;
@@ -56,6 +59,11 @@ const Popup = () => {
     await sleep(300);
     getMemberList();
   };
+
+  if (!window.location.pathname.includes(meetURL)) {
+    // Only available in meet
+    return <NotDetected />;
+  }
 
   // init
   useEffect(() => {
