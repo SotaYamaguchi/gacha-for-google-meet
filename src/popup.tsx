@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
+import { RedoIcon } from "./components/atoms/RedoIcon";
 import shuffle from "./helper/shuffle";
 
 const Popup = () => {
@@ -62,7 +63,15 @@ const Popup = () => {
         </section>
         <section>
           <div>
-            <button onClick={getMemberList}>Shuffle</button>
+            <button
+              onClick={getMemberList}
+              style={{ display: "flex", padding: "0.5rem 1rem" }}
+            >
+              Shuffle
+              <div style={{ marginLeft: "0.5rem" }}>
+                <RedoIcon />
+              </div>
+            </button>
           </div>
           {!!currentTime && (
             <div style={{ marginTop: "0.5rem" }}>

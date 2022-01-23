@@ -2,17 +2,17 @@
   "manifest_version": 2,
 
   "name": "Shuffle Members Extension for Google Meet",
-  "description": "A extention for Google Meet",
+  "description": "A extension for Google Meet",
   "version": "0.1.1",
 
   "icons": {
-    "16": "icon.png",
-    "48": "icon.png",
-    "128": "icon.png"
+    "16": "./icon.png",
+    "48": "./icon.png",
+    "128": "./icon.png"
   },
 
   "browser_action": {
-    "default_icon": "icon.png",
+    "default_icon": "./icon.png",
     "default_popup": "popup.html"
   },
 
