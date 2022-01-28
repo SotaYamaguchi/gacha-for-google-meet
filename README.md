@@ -6,13 +6,11 @@
 
 [chrome-extention.zip](https://github.com/SotaYamaguchi/shuffle-members-extension-for-google-meet/releases)
 
-![image](https://user-images.githubusercontent.com/24993603/140242306-097d7d79-9df7-4bd5-8988-10e2a039b23d.png)
+![image](https://user-images.githubusercontent.com/24993603/151560055-697c9e29-4a1b-4f7f-a2d1-c173df092678.png)
 
 ## 使い方
 
-- `dist` ディレクトリが生成されていること
-
-  - `dist` ディレクトリがない場合は下に記載のある Setup・Build を実行する
+- ターミナルにて `npm run build` を実行する
 
 - `chrome://extensions/` にアクセスし、「パッケージ化されていない拡張機能を取り込む」をクリック
 
