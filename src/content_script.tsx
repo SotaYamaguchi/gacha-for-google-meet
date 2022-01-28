@@ -1,47 +1,51 @@
-import { ALL_USER_BUTTON_LABEL } from "./constants/common";
+import { SEND_MESSAGES } from "./constants/commons";
 
-type NodeName = "DIV" | "SPAN";
+const LABELS_FOR_BUTTONS = {
+  ALL_USER_BUTTON: "全員を表示",
+  CHAT_BUTTON: "全員とチャット",
+} as const;
 
-const pickChildElm = (parent: HTMLCollection, nodeName: NodeName) => {
-  let nodeList: Element[] = [];
-  // nodeName で指定したノードのみになるようフィルターする
-  for (let targetElm of parent) {
-    if (targetElm.nodeName === nodeName) {
-      nodeList = [...nodeList, targetElm];
-    }
+type LABEL_FOR_BUTTON =
+  typeof LABELS_FOR_BUTTONS[keyof typeof LABELS_FOR_BUTTONS];
+
+const listItemClassName = ".cxdMu";
+let openedDrawersLabels: LABEL_FOR_BUTTON[] = [];
+
+type FindUserNameFromElm = (parentElm: Element) => string;
+type OpenDrawer = (buttonLabel: LABEL_FOR_BUTTON) => void;
+type GetUserNameList = (sendResponse: (response?: any) => void) => void;
+
+const findUserNameFromElm: FindUserNameFromElm = (parentElm) => {
+  // 最初のdiv > 2番目のdiv > div > span.innerHTML
+  return parentElm.children[0].children[1].children[0].children[0].innerHTML.toLowerCase();
+};
+
+const openDrawer: OpenDrawer = (buttonLabel) => {
+  if (openedDrawersLabels.find((label) => label === buttonLabel)) {
+    // 既に開いたドロワーは再度開く必要がないため処理をスキップする
+    return;
   }
-  return nodeList;
-};
-
-const findUserNameFromElm = (parentElm: Element) => {
-  const child1Divs = pickChildElm(parentElm.children, "DIV");
-  const child2Divs = pickChildElm(child1Divs[0].children, "DIV");
-  const childSpans = pickChildElm(child2Divs[0].children, "SPAN");
-  return childSpans[0].innerHTML.toLowerCase();
-};
-
-const openAllUserDrawer = () => {
   /*
    * 各ボタンの aria-label 属性にラベルに表示するボタン名が格納されている
    * 全てのボタンを DOM から取得して全員を表示ボタンを探す
    */
   const ariaLabelElems = document.querySelectorAll("[aria-label]");
   for (let i = 0; i < ariaLabelElems.length; i++) {
-    if (
-      ariaLabelElems[i].getAttribute("aria-label") === ALL_USER_BUTTON_LABEL
-    ) {
+    if (ariaLabelElems[i].getAttribute("aria-label") === buttonLabel) {
       const chatOpenButton = ariaLabelElems[i] as HTMLButtonElement;
       chatOpenButton.click();
+
+      openedDrawersLabels = [...openedDrawersLabels, buttonLabel];
     }
   }
 };
 
-const getUserNameList = (sendResponse: (response?: any) => void) => {
+const getUserNameList: GetUserNameList = (sendResponse) => {
   let names: string[] = [];
-  const elems = document.querySelectorAll(".cylMye");
+  const elems = document.querySelectorAll(listItemClassName);
   if (!elems.length) {
-    // .cylMye が存在しない = ユーザー一覧 drawer が表示されていない
-    openAllUserDrawer();
+    // listItemClassName が存在しない = ユーザー一覧 drawer が表示されていない
+    openDrawer(LABELS_FOR_BUTTONS.ALL_USER_BUTTON);
     return;
   }
   for (let i = 0; i < elems.length; i++) {
@@ -54,4 +58,8 @@ const getUserNameList = (sendResponse: (response?: any) => void) => {
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   getUserNameList(sendResponse);
+
+  if (msg === SEND_MESSAGES.CHAT_OPEN) {
+    openDrawer(LABELS_FOR_BUTTONS.CHAT_BUTTON);
+  }
 });

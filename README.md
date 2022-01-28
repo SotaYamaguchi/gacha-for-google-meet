@@ -1,20 +1,20 @@
-# Member Sort Extension for Google Meet
+# Shuffle Members Extension for Google Meet
 
-![build](https://github.com/SotaYamaguchi/member-sort-extension-for-google-meet/workflows/build/badge.svg)
+![image](./public/icon.png)
 
-[chrome-extention.zip](https://github.com/SotaYamaguchi/member-sort-extension-for-google-meet/releases)
+[![build](https://github.com/SotaYamaguchi/shuffle-members-extension-for-google-meet/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/SotaYamaguchi/shuffle-members-extension-for-google-meet/actions/workflows/build.yml)
 
-![image](https://user-images.githubusercontent.com/24993603/124685156-aae99080-df0b-11eb-94fd-aa7fcdc861e8.png)
+[chrome-extention.zip](https://github.com/SotaYamaguchi/shuffle-members-extension-for-google-meet/releases)
+
+![image](https://user-images.githubusercontent.com/24993603/151560055-697c9e29-4a1b-4f7f-a2d1-c173df092678.png)
 
 ## 使い方
 
-- `dist` ディレクトリが生成されていること
-
-  - `dist` ディレクトリがない場合は下に記載のある Setup・Build を実行する
+- ターミナルにて `npm run build` を実行する
 
 - `chrome://extensions/` にアクセスし、「パッケージ化されていない拡張機能を取り込む」をクリック
 
-- `chrome-extension-typescript-starter/dist` ディレクトリを取り込む
+- `shuffle-members-extension-for-google-meet/dist` ディレクトリを取り込む
 
 ここまで行うと chrome の拡張機能に表示されます
 
@@ -24,22 +24,22 @@ Chrome Extension, TypeScript and Visual Studio Code
 
 ## Prerequisites
 
-* [node + npm](https://nodejs.org/) (Current Version)
+- [node + npm](https://nodejs.org/) (Current Version)
 
 ## Option
 
-* [Visual Studio Code](https://code.visualstudio.com/)
+- [Visual Studio Code](https://code.visualstudio.com/)
 
 ## Project Structure
 
-* src/typescript: TypeScript source files
-* src/assets: static files
-* dist: Chrome Extension directory
-* dist/js: Generated JavaScript files
+- src/typescript: TypeScript source files
+- src/assets: static files
+- dist: Chrome Extension directory
+- dist/js: Generated JavaScript files
 
 ## Setup
 
-```
+```bash
 npm install
 ```
 
@@ -49,7 +49,7 @@ npm install
 
 ## Build
 
-```
+```bash
 npm run build
 ```
 
@@ -57,7 +57,7 @@ npm run build
 
 ### terminal
 
-```
+```bash
 npm run watch
 ```
 
@@ -72,8 +72,9 @@ type `Ctrl + Shift + B`
 Load `dist` directory
 
 ## Test
+
 `npx jest` or `npm run test`
 
-## etc.
+## etc
 
 referenced from: <https://github.com/chibat/chrome-extension-typescript-starter>
