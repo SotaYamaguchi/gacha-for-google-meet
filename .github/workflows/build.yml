@@ -20,7 +20,7 @@ jobs:
       - name: yarn install & build
         run: |
           yarn
-          yarn build --if-present
+          yarn build
       - name: zip output
         run: |
           cd dist
