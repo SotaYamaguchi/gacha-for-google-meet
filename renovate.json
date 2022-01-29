@@ -1,5 +1,16 @@
 {
   "extends": [
-    "config:base"
-  ]
+    "config:base",
+    "group:allNonMajor",
+    "group:definitelyTyped"
+  ],
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
+    }
+  ],
+  "lockFileMaintenance": { "enabled": true },
+  "schedule": ["before 8am on Tuesday"],
+  "timezone": "Asia/Tokyo"
 }
