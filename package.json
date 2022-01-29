@@ -1,6 +1,6 @@
 {
   "name": "member-sort-extension-for-google-meet",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "member-sort-extension-for-google-meet",
   "main": "index.js",
   "scripts": {
