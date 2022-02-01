@@ -1,4 +1,4 @@
-import lodashShuffle from 'lodash/shuffle';
+import lodashShuffle from "lodash/shuffle";
 
 type Shuffle = (list: string[]) => string[];
 
