@@ -1,10 +1,10 @@
-# Shuffle Members Extension for Google Meet
+# Meet Gacha Order
 
 ![image](./public/icon.png)
 
-[![build](https://github.com/SotaYamaguchi/shuffle-members-extension-for-google-meet/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/SotaYamaguchi/shuffle-members-extension-for-google-meet/actions/workflows/build.yml)
+[![build](https://github.com/SotaYamaguchi/meet-gacha-order/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/SotaYamaguchi/meet-gacha-order/actions/workflows/build.yml)
 
-[chrome-extention.zip](https://github.com/SotaYamaguchi/shuffle-members-extension-for-google-meet/releases)
+[chrome-extention.zip](https://github.com/SotaYamaguchi/meet-gacha-order/releases)
 
 ![image](https://user-images.githubusercontent.com/24993603/151560055-697c9e29-4a1b-4f7f-a2d1-c173df092678.png)
 
