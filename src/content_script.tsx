@@ -13,7 +13,7 @@ let openedDrawersLabels: LABEL_FOR_BUTTON[] = [];
 
 type FindUserNameFromElm = (parentElm: Element) => string;
 type OpenDrawer = (buttonLabel: LABEL_FOR_BUTTON) => void;
-type GetUserNameList = (sendResponse: (response?: any) => void) => void;
+type GetUserNameList = (sendResponse: (response?: string) => void) => void;
 
 const findUserNameFromElm: FindUserNameFromElm = (parentElm) => {
   // 最初のdiv > 2番目のdiv > div > span.innerHTML
@@ -21,7 +21,7 @@ const findUserNameFromElm: FindUserNameFromElm = (parentElm) => {
 };
 
 const openDrawer: OpenDrawer = (buttonLabel) => {
-  if (openedDrawersLabels.find((label) => label === buttonLabel)) {
+  if (openedDrawersLabels.includes(buttonLabel)) {
     // 既に開いたドロワーは再度開く必要がないため処理をスキップする
     return;
   }
@@ -30,9 +30,9 @@ const openDrawer: OpenDrawer = (buttonLabel) => {
    * 全てのボタンを DOM から取得して全員を表示ボタンを探す
    */
   const ariaLabelElems = document.querySelectorAll("[aria-label]");
-  for (let i = 0; i < ariaLabelElems.length; i++) {
-    if (ariaLabelElems[i].getAttribute("aria-label") === buttonLabel) {
-      const chatOpenButton = ariaLabelElems[i] as HTMLButtonElement;
+  for (const ariaLabelElem of ariaLabelElems) {
+    if (ariaLabelElem.getAttribute("aria-label") === buttonLabel) {
+      const chatOpenButton = ariaLabelElem as HTMLButtonElement;
       chatOpenButton.click();
 
       openedDrawersLabels = [...openedDrawersLabels, buttonLabel];
@@ -43,16 +43,16 @@ const openDrawer: OpenDrawer = (buttonLabel) => {
 const getUserNameList: GetUserNameList = (sendResponse) => {
   let names: string[] = [];
   const elems = document.querySelectorAll(listItemClassName);
-  if (!elems.length) {
+  if (elems.length === 0) {
     // listItemClassName が存在しない = ユーザー一覧 drawer が表示されていない
     openDrawer(LABELS_FOR_BUTTONS.ALL_USER_BUTTON);
     return;
   }
-  for (let i = 0; i < elems.length; i++) {
-    names = [...names, findUserNameFromElm(elems[i])];
+  for (const elem of elems) {
+    names = [...names, findUserNameFromElm(elem)];
   }
   // 重複した名前を省く
-  names = Array.from(new Set(names));
+  names = [...new Set(names)];
   sendResponse(names.join(","));
 };
 

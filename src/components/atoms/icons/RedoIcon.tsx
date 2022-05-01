@@ -1,6 +1,6 @@
-import React from "react";
+import React, { VFC } from "react";
 
-export const RedoIcon = () => {
+export const RedoIcon: VFC = () => {
   return (
     <svg
       stroke="currentColor"

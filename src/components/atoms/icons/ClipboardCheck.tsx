@@ -1,6 +1,6 @@
-import React from "react";
+import React, { VFC } from "react";
 
-export const ClipboardCheck = () => {
+export const ClipboardCheck: VFC = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

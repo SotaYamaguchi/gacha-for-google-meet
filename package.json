@@ -12,7 +12,7 @@
     "lint:es": "eslint --fix './src/**/*.{ts,tsx}'",
     "lint:ts": "tsc --noEmit",
     "format": "prettier --write 'src/**/*'",
-    "check": "npm run lint && npm run format && npm run test",
+    "check": "npm run lint && npm run format",
     "test": "npx jest",
     "commit": "lint-staged -v",
     "prepare": "husky install"
@@ -23,8 +23,7 @@
     "*.{ts,tsx}": [
       "prettier --write",
       "eslint --fix",
-      "bash -c 'npm run lint:ts'",
-      "bash -c 'npm run test'"
+      "bash -c 'npm run lint:ts'"
     ]
   },
   "dependencies": {
@@ -41,11 +40,17 @@
     "@typescript-eslint/parser": "^5.21.0",
     "copy-webpack-plugin": "10.2.4",
     "eslint": "^8.14.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-config-standard": "^17.0.0",
+    "eslint-import-resolver-typescript": "^2.7.1",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-n": "^15.2.0",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.29.4",
+    "eslint-plugin-sort-keys-fix": "^1.1.2",
+    "eslint-plugin-typescript-sort-keys": "^2.1.0",
+    "eslint-plugin-unicorn": "^42.0.0",
+    "eslint-plugin-unused-imports": "^2.0.0",
     "husky": "^7.0.4",
     "lint-staged": "^12.4.1",
     "npm-run-all": "^4.1.5",
