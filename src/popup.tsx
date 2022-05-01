@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, VFC } from "react";
 import ReactDOM from "react-dom";
 import { ClipboardCheck } from "./components/atoms/icons/ClipboardCheck";
 import { ClipboardCopy } from "./components/atoms/icons/ClipboardCopy";
@@ -13,23 +13,34 @@ type HandleClickCopy = () => void;
 type HandleChangeExcludeMembers = (
   e: React.ChangeEvent<HTMLTextAreaElement>
 ) => void;
+type Sleep = (waitTime: number) => void;
+type Initialize = () => Promise<void>;
 
-const Popup = () => {
+const currentChromeTab: CurrentChromeTab = (callback) => {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    // 現在表示しているタブを取得
+    const tab = tabs[0];
+    if (tab.id) {
+      callback(tab.id);
+    }
+  });
+};
+
+const openChatOnMeet: OpenChatOnMeet = () => {
+  currentChromeTab((tabId) => {
+    chrome.tabs.sendMessage(tabId, SEND_MESSAGES.CHAT_OPEN);
+  });
+};
+
+const sleep: Sleep = (waitTime) =>
+  new Promise((resolve) => setTimeout(resolve, waitTime));
+
+const Popup: VFC = () => {
   // state
   const [currentTime, setCurrentTime] = useState<Date>();
   const [members, setMembers] = useState<string[]>([]);
   const [excludeMembers, setExcludeMembers] = useState<string>("");
   const [copied, setCopied] = useState<boolean>(false);
-
-  const currentChromeTab: CurrentChromeTab = (callback) => {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      // 現在表示しているタブを取得
-      const tab = tabs[0];
-      if (tab.id) {
-        callback(tab.id);
-      }
-    });
-  };
 
   const getMemberList: GetMemberList = () => {
     currentChromeTab((tabId) => {
@@ -50,12 +61,6 @@ const Popup = () => {
     });
   };
 
-  const openChatOnMeet: OpenChatOnMeet = () => {
-    currentChromeTab((tabId) => {
-      chrome.tabs.sendMessage(tabId, SEND_MESSAGES.CHAT_OPEN);
-    });
-  };
-
   const handleClickCopy: HandleClickCopy = () => {
     const copyText = filterdMembers
       .map((member, i) => `${i + 1}. ${member}`)
@@ -71,10 +76,7 @@ const Popup = () => {
   const handleChangeExcludeMembers: HandleChangeExcludeMembers = (e) =>
     setExcludeMembers(e.target.value);
 
-  const sleep = (waitTime: number) =>
-    new Promise((resolve) => setTimeout(resolve, waitTime));
-
-  const initialize = async () => {
+  const initialize: Initialize = async () => {
     // 初回はユーザー一覧 drawer のレンダリングを待つため sleep を入れる
     await sleep(300);
     getMemberList();
@@ -94,13 +96,11 @@ const Popup = () => {
 
   const excludeMemberNames = excludeMembers.split(",");
   const filterdMembers = members.filter((member) => {
-    return !excludeMemberNames.find(
-      (excludeMember) => excludeMember === member
-    );
+    return !excludeMemberNames.includes(member);
   });
 
   const formDisabled = filterdMembers.length <= 1;
-  const isShowing = !!filterdMembers.length;
+  const isShowing = filterdMembers.length > 0;
 
   return (
     <div>
@@ -118,15 +118,15 @@ const Popup = () => {
             <div>
               <div
                 style={{
-                  width: "100%",
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "space-between",
+                  width: "100%",
                 }}
               >
                 <div style={{ display: "flex", flexDirection: "column" }}>
                   <p>参加メンバー</p>
-                  <ul style={{ listStyle: "none", fontSize: "0.9rem" }}>
+                  <ul style={{ fontSize: "0.9rem", listStyle: "none" }}>
                     {filterdMembers.map((x, i) => (
                       <li key={i}>{`${i + 1}. ${x}`}</li>
                     ))}
@@ -145,9 +145,7 @@ const Popup = () => {
                   </label>
                   <textarea
                     value={excludeMembers}
-                    onChange={(e) => {
-                      handleChangeExcludeMembers(e);
-                    }}
+                    onChange={handleChangeExcludeMembers}
                     disabled={formDisabled}
                     rows={5}
                     cols={22}
@@ -158,23 +156,23 @@ const Popup = () => {
           )}
           <div
             style={{
-              marginTop: "1rem",
               display: "flex",
               justifyContent: "space-evenly",
+              marginTop: "1rem",
             }}
           >
             <div>
               <button
                 onClick={getMemberList}
                 style={{
-                  display: "flex",
                   alignItems: "center",
+                  backgroundColor: "rgb(126, 126, 126)",
+                  color: "white",
+                  display: "flex",
+                  height: "2.5rem",
                   justifyContent: "center",
                   padding: "0.5rem 1rem",
-                  color: "white",
-                  backgroundColor: "rgb(126, 126, 126)",
                   width: "6rem",
-                  height: "2.5rem",
                 }}
               >
                 Shuffle
@@ -188,17 +186,17 @@ const Popup = () => {
                 <button
                   onClick={handleClickCopy}
                   style={{
-                    display: "flex",
                     alignItems: "center",
-                    justifyContent: "center",
-                    padding: "0.5rem 1rem",
-                    fontWeight: "bold",
-                    color: "white",
                     backgroundColor: copied
                       ? "rgb(51, 103, 214)"
                       : "rgb(0, 157, 237)",
-                    width: "6rem",
+                    color: "white",
+                    display: "flex",
+                    fontWeight: "bold",
                     height: "2.5rem",
+                    justifyContent: "center",
+                    padding: "0.5rem 1rem",
+                    width: "6rem",
                   }}
                 >
                   {copied ? "Copied!" : "Copy"}
@@ -219,5 +217,5 @@ ReactDOM.render(
   <React.StrictMode>
     <Popup />
   </React.StrictMode>,
-  document.getElementById("root")
+  document.querySelector("#root")
 );
