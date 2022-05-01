@@ -1,10 +1,11 @@
-import React, { useEffect, useState, VFC } from "react";
+import React, { useState, VFC } from "react";
 import ReactDOM from "react-dom";
 import { ClipboardCheck } from "./components/atoms/icons/ClipboardCheck";
 import { ClipboardCopy } from "./components/atoms/icons/ClipboardCopy";
 import { RedoIcon } from "./components/atoms/icons/RedoIcon";
 import { SEND_MESSAGES } from "./constants/commons";
 import shuffle from "./helper/shuffle";
+import { useEffectOnce } from "./hooks";
 
 type CurrentChromeTab = (callback: (tabId: number) => void) => void;
 type GetMemberList = () => void;
@@ -62,7 +63,7 @@ const Popup: VFC = () => {
   };
 
   const handleClickCopy: HandleClickCopy = () => {
-    const copyText = filterdMembers
+    const copyText = filteredMembers
       .map((member, i) => `${i + 1}. ${member}`)
       .join("\n");
     navigator.clipboard.writeText(copyText);
@@ -83,7 +84,7 @@ const Popup: VFC = () => {
   };
 
   // init
-  useEffect(() => {
+  useEffectOnce(() =>
     currentChromeTab((tabId) => {
       // ユーザー一覧 drawer を表示させる
       chrome.tabs.sendMessage(
@@ -91,16 +92,16 @@ const Popup: VFC = () => {
         undefined, // message は不要なため undefined とする
         () => initialize()
       );
-    });
-  }, []);
+    })
+  );
 
   const excludeMemberNames = excludeMembers.split(",");
-  const filterdMembers = members.filter((member) => {
+  const filteredMembers = members.filter((member) => {
     return !excludeMemberNames.includes(member);
   });
 
-  const formDisabled = filterdMembers.length <= 1;
-  const isShowing = filterdMembers.length > 0;
+  const formDisabled = filteredMembers.length <= 1;
+  const isShowing = filteredMembers.length > 0;
 
   return (
     <div>
@@ -127,7 +128,7 @@ const Popup: VFC = () => {
                 <div style={{ display: "flex", flexDirection: "column" }}>
                   <p>参加メンバー</p>
                   <ul style={{ fontSize: "0.9rem", listStyle: "none" }}>
-                    {filterdMembers.map((x, i) => (
+                    {filteredMembers.map((x, i) => (
                       <li key={i}>{`${i + 1}. ${x}`}</li>
                     ))}
                   </ul>
