@@ -1,21 +1,18 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
 
-  "name": "Shuffle Members Extension for Google Meet",
-  "description": "A extension for Google Meet",
-  "version": "0.1.1",
-
+  "name": "Gacha for Meet",
+  "description": "This is an extension to shuffle and list MTG participants.This extension works with Google Meet.",
+  "version": "1.0.0",
   "icons": {
     "16": "./icon.png",
     "48": "./icon.png",
     "128": "./icon.png"
   },
-
-  "browser_action": {
+  "action": {
     "default_icon": "./icon.png",
     "default_popup": "popup.html"
   },
-
   "content_scripts": [
       {
           "matches": ["https://meet.google.com/*"],

@@ -1,37 +1,66 @@
 {
   "name": "member-sort-extension-for-google-meet",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "member-sort-extension-for-google-meet",
   "main": "index.js",
   "scripts": {
     "watch": "webpack --config webpack/webpack.dev.js --watch",
     "build": "prettier --write \"src/**/*.{ts,tsx}\" & webpack --config webpack/webpack.prod.js",
     "clean": "rimraf dist",
+    "style": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "lint": "run-p lint:*",
+    "lint:es": "eslint --fix './src/**/*.{ts,tsx}'",
+    "lint:ts": "tsc --noEmit",
+    "format": "prettier --write 'src/**/*'",
+    "check": "npm run lint && npm run format",
     "test": "npx jest",
-    "style": "prettier --write \"src/**/*.{ts,tsx}\""
+    "commit": "lint-staged -v",
+    "prepare": "husky install"
   },
   "author": "",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/chibat/chrome-extension-typescript-starter.git"
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "prettier --write",
+      "eslint --fix",
+      "bash -c 'npm run lint:ts'"
+    ]
   },
   "dependencies": {
-    "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "lodash": "4.17.21",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "@types/chrome": "0.0.177",
-    "@types/react": "17.0.38",
-    "@types/react-dom": "17.0.11",
-    "copy-webpack-plugin": "6.4.1",
-    "prettier": "2.5.1",
+    "@types/chrome": "0.0.183",
+    "@types/lodash": "4.14.182",
+    "@types/react": "18.0.8",
+    "@types/react-dom": "18.0.3",
+    "@typescript-eslint/eslint-plugin": "5.30.7",
+    "@typescript-eslint/parser": "5.30.7",
+    "copy-webpack-plugin": "10.2.4",
+    "eslint": "8.20.0",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-config-standard": "17.0.0",
+    "eslint-import-resolver-typescript": "2.7.1",
+    "eslint-plugin-import": "2.26.0",
+    "eslint-plugin-n": "15.2.4",
+    "eslint-plugin-promise": "6.0.0",
+    "eslint-plugin-react": "7.30.1",
+    "eslint-plugin-sort-keys-fix": "1.1.2",
+    "eslint-plugin-typescript-sort-keys": "2.1.0",
+    "eslint-plugin-unicorn": "42.0.0",
+    "eslint-plugin-unused-imports": "2.0.0",
+    "husky": "7.0.4",
+    "lint-staged": "12.5.0",
+    "npm-run-all": "4.1.5",
+    "prettier": "2.7.1",
     "rimraf": "3.0.2 ",
-    "ts-jest": "27.1.3",
-    "ts-loader": "6.2.2",
-    "typescript": "3.9.10",
-    "webpack": "4.46.0",
-    "webpack-cli": "3.3.12",
-    "webpack-merge": "4.2.2"
+    "ts-jest": "27.1.5",
+    "ts-loader": "9.3.1",
+    "typescript": "4.7.4",
+    "webpack": "5.73.0",
+    "webpack-cli": "4.10.0",
+    "webpack-merge": "5.8.0"
   }
 }
