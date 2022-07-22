@@ -22,8 +22,8 @@ MTGの参加者の名前を、シャッフルして一覧表示するための�
 ## Development
 
 ```bash
-$ git clone https://github.com/SotaYamaguchi/gacha-for-google-meet.git
-$ cd gacha-for-google-meet
-$ npm run install
-$ npm run build
+git clone https://github.com/SotaYamaguchi/gacha-for-google-meet.git
+cd gacha-for-google-meet
+npm run install
+npm run build
 ```
