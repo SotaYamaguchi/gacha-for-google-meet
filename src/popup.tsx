@@ -1,5 +1,6 @@
 import React, { useState, VFC } from "react";
 import ReactDOM from "react-dom";
+import NumberedListIndex from "./components/atoms/NumberedListIndex";
 import { ClipboardCheck } from "./components/atoms/icons/ClipboardCheck";
 import { ClipboardCopy } from "./components/atoms/icons/ClipboardCopy";
 import { RedoIcon } from "./components/atoms/icons/RedoIcon";
@@ -14,7 +15,7 @@ type HandleClickCopy = () => void;
 type HandleChangeExcludeMembers = (
   e: React.ChangeEvent<HTMLTextAreaElement>
 ) => void;
-type Sleep = (waitTime: number) => void;
+type Sleep = (waitTime: number) => Promise<void>;
 type Initialize = () => Promise<void>;
 
 const currentChromeTab: CurrentChromeTab = (callback) => {
@@ -128,9 +129,14 @@ const Popup: VFC = () => {
                 <div style={{ display: "flex", flexDirection: "column" }}>
                   <p>参加メンバー</p>
                   <ul style={{ fontSize: "0.9rem", listStyle: "none" }}>
-                    {filteredMembers.map((x, i) => (
-                      <li key={i}>{`${i + 1}. ${x}`}</li>
-                    ))}
+                    {filteredMembers.map((member, i) => {
+                      return (
+                        <li key={i}>
+                          <NumberedListIndex>{`${i + 1}. `}</NumberedListIndex>
+                          {member}
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
                 <div
