@@ -31,10 +31,10 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "@types/chrome": "0.0.195",
-    "@types/lodash": "4.14.184",
-    "@types/react": "18.0.17",
-    "@types/react-dom": "18.0.6",
+    "@types/chrome": "0.0.263",
+    "@types/lodash": "4.17.0",
+    "@types/react": "18.2.73",
+    "@types/react-dom": "18.2.22",
     "@typescript-eslint/eslint-plugin": "5.35.1",
     "@typescript-eslint/parser": "5.35.1",
     "copy-webpack-plugin": "11.0.0",
